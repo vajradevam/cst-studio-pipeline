@@ -2,7 +2,7 @@ from cx_Freeze import setup, Executable
 
 base = "Win32GUI"    
 
-executables = [Executable("gui.py", base=base)]
+executables = [Executable("main.py", base=base)]
 
 packages = ["idna", "numpy", "customtkinter", "__future__", "csv"]
 options = {

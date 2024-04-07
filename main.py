@@ -8,9 +8,7 @@ import csv
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
 
-def extract(
-        s11_offset_multiplier, 
-        gain_offset_multiplier, 
+def extract( 
         s11_filename, 
         gain_filename, 
         save_file,
@@ -74,6 +72,24 @@ def extract(
     """Open Gain File """
     with open(gain_filename, "r") as f:
         gain_file = [x for x in f.readlines()]
+
+    temp = []
+    # get the offsets
+    for entry in s11_file[1:]:
+        if "Parameters" not in entry:
+            temp.append(entry)
+        else:
+            break
+    s11_offset_multiplier = len(temp) + 1
+
+    temp = []
+    # get the offsets
+    for entry in gain_file[1:]:
+        if "Parameters" not in entry:
+            temp.append(entry)
+        else:
+            break
+    gain_offset_multiplier = len(temp) + 1
 
     """Extract Headers / Column Names"""
     temp = s11_file[0]
@@ -182,25 +198,8 @@ class ChekcBoxFrame(customtkinter.CTkFrame):
         self.checkbox_bandwidth = customtkinter.CTkCheckBox(self, text="BANDWIDTH")
         self.checkbox_bandwidth.grid(row=2, column=1, padx=10, pady=(10, 0), sticky="w")
 
-        # Offset Labels
-        self.label_s11_offset = customtkinter.CTkLabel(self, text="S11 Offset: ")
-        self.label_s11_offset.grid(row=3, column=0, padx=10, pady=(10, 0), sticky="w")
-
-        self.label_gain_offset = customtkinter.CTkLabel(self, text="Gain Offset: ")
-        self.label_gain_offset.grid(row=4, column=0, padx=10, pady=(10, 0), sticky="w")
-
-        # Offset Text Boxes
-        self.textbox_s11_offset = customtkinter.CTkTextbox(self, height=1, width=80)
-        self.textbox_s11_offset.grid(row=3, column=1, padx=10, pady=(10, 0), sticky="w")
-
-        self.textbox_gain_offset = customtkinter.CTkTextbox(self, height=1, width=80)
-        self.textbox_gain_offset.grid(row=4, column=1, padx=10, pady=(10, 0), sticky="w")
-
     def return_checkboxes(self):
         return (self.checkbox_s11, self.checkbox_gain, self.checkbox_freq, self.checkbox_bandwidth)
-    
-    def return_offset_boxes(self):
-        return (self.textbox_s11_offset, self.textbox_gain_offset)
 
 class ButtonFrame(customtkinter.CTkFrame):
     def __init__(self, master):
@@ -242,17 +241,14 @@ class ButtonFrame(customtkinter.CTkFrame):
     def select_s11_file(self):
         self.s11_file_name = filedialog.askopenfilename()
         self.text_box_s11.insert("0.0", text = self.s11_file_name)
-        print(self.s11_file_name)
 
     def select_gain_file(self):
         self.gain_file_name = filedialog.askopenfilename()
         self.text_box_gain.insert("0.0", text = self.gain_file_name)
-        print(self.gain_file_name)
 
     def select_result_file(self):
         self.result_file_name = filedialog.askopenfilename()
         self.text_box_result.insert("0.0", text = self.result_file_name)
-        print(self.result_file_name)
 
     def return_file_names(self):
         return (self.s11_file_name, self.gain_file_name, self.result_file_name)
@@ -288,18 +284,11 @@ class App(customtkinter.CTk):
 
         filenames = self.button_frame.return_file_names()
 
-        offset_texboxes = self.checkbox_frame.return_offset_boxes()
-
-        s11_offset = int(offset_texboxes[0].get("1.0","end"))
-        gain_offset = int(offset_texboxes[1].get("1.0","end"))
-
         s11_file_name = filenames[0]
         gain_file_name = filenames[1]
         result_file_name = filenames[2]
 
         status = extract(
-            s11_offset_multiplier=s11_offset,
-            gain_offset_multiplier=gain_offset,
             s11_filename=s11_file_name,
             gain_filename=gain_file_name,
             save_file=result_file_name,
