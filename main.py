@@ -237,7 +237,7 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("CST Studio 2022 Data Pipeline 0.0.1")
+        self.title("CST Studio 2022 Data Pipeline 0.1.2")
         self.geometry("700x500")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure((0, 0), weight=1)

@@ -14,7 +14,7 @@ options = {
 setup(
     name = "CST Studio 2020 Data Pipeline",
     options = options,
-    version = "0.0.1",
+    version = "0.1.2",
     description = '©Vajradevam S., Neptunes Aerospace, 2024',
     executables = executables
 )
