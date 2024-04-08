@@ -23,7 +23,7 @@ def extract(
         def intercept(point1, point2, point3, point4):
             """find the intersection between two lines
             the first line is defined by the line between point1 and point2
-            the first line is defined by the line between point3 and point4
+            the second line is defined by the line between point3 and point4
             each point is an (x,y) tuple.
 
             So, for example, you can find the intersection between
@@ -65,11 +65,9 @@ def extract(
             ycs.append(yc)
         return np.array(xcs), np.array(ycs)
 
-    """Open S11 File"""
     with open(s11_filename, "r") as f:
         s11_file = [x for x in f.readlines()]
 
-    """Open Gain File """
     with open(gain_filename, "r") as f:
         gain_file = [x for x in f.readlines()]
 
@@ -91,7 +89,6 @@ def extract(
             break
     gain_offset_multiplier = len(temp) + 1
 
-    """Extract Headers / Column Names"""
     temp = s11_file[0]
     headers = [x.split("=")[0] for x in temp[15:-2].split("; ")]
 
@@ -100,54 +97,38 @@ def extract(
     if bool_get_gain: headers.append("gain")
     if bool_get_bandwidth: headers.append("bandwidth")
 
-    """Write the Headers to the processed data file"""
     with open(save_file, "a", newline='') as f:
         writer = csv.writer(f, delimiter=',')
         writer.writerow(headers)
 
-    """Get one row of data"""
     def get_one(chunk_s11, chunk_gain):
 
-        """Frequency vs Gain"""
         freqs1 = [float(x[:-1].split('\t')[0]) for x in chunk_gain[3:]]
         gains = [float(x[:-1].split('\t')[1]) for x in chunk_gain[3:]]
 
-        """frequency vs S11"""
         freqs2 = [float(x[:-1].split('\t')[0]) for x in chunk_s11[3:]]
         s11s = [float(x[:-1].split('\t')[1]) for x in chunk_s11[3:]]
 
-        """Get Minimum S11, and respective gain and frequency"""
         min_s11 = min(s11s)
         freq = freqs2[s11s.index(min_s11)]
         gain = np.interp(freq, freqs1, gains)
 
-        """Get the additional data of the row"""
         row = [float(x.split("=")[1]) for x in chunk_s11[0][15:-2].split("; ")]
 
-        """Selective Push of vars can be defined"""
         if bool_get_freq: row.append(freq)
         if bool_get_s11: row.append(min_s11)
         if bool_get_gain: row.append(gain)
         
-        """A array of constant -10 with length of same as the
-        Number of points in S11 vs Frequencies is used in order
-        to calculate the intersection point of the original curve
-        with the line y = -10 (90% power transfer). Can also
-        change this value to be dynamic."""
         const = []
         for i in range(len(freqs2)):
             const.append(-10)
 
-        """Returns the frequencies which have the exact s11 value of -10;
-        and their values"""
         s11_crossers, vals = interpolated_intercepts(np.array(freqs2), np.array(const), np.array(s11s))
         d = [x[0] for x in s11_crossers]
         
-        """To find a middle point; there must be even number of points"""
         if len(d) % 2 != 0:
             d = d[:-1]
         
-        """Pick two exclusivly and chekc if our frequencies lies between"""
         if bool_get_bandwidth: 
             for i in range(0, len(d), 2):
                 if d[i] < freq < d[i + 1]:
@@ -159,7 +140,6 @@ def extract(
             except UnboundLocalError:
                 print(freq, d)
 
-        """Dump the row values in the csv file"""
         with open(save_file, "a", newline='') as f:
             writer = csv.writer(f, delimiter=',')
             writer.writerow(row)
