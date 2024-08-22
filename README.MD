@@ -7,28 +7,35 @@ CST Studio Pipeline is a Python program designed to extract and process data fro
 Clone the repository using Git:
 
 ```bash
-$ git clone https://github.com/brushwayne/cst_studio-pipeline.git
+git clone https://github.com/brushwayne/cst_studio-pipeline.git
 ```
 
 Create a virtual environment
 
 ```bash
-$ python -m venv VENV
+python -m venv VENV
 ```
 
 Activate the virtual environment depending on your Operating System then install the required dependencies:
 
 ```bash
-$ pip install -r requirements.txt
+pip --no-cahce-dir install -r requirements.txt
 ```
 
-Alternatively, You can download the latest executable from [here](https://github.com/brushwayne/cst_studio-pipeline/releases/tag/v0.1.2).
 ## Running 
 
 ```bash
-$ cd cst_studio-pipeline
-$ python main.py
+cd cst_studio-pipeline
+python main.py
 ```
+
+## Building for windows
+
+```bash
+python setup.py build
+```
+Then you can go into the `build` directory and run the executable file to do the work in your computer dr saaar. PLz ssaaar give me atttendence saaar....
+
 
 ## Usage
 

@@ -8,40 +8,6 @@ import csv
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
 
-"""
-def floop():
-    lst = [1, 2, 3, 4, 5]
-    offset = 2
-
-    iters = len(lst) // offset
-
-    for i in range(iters):
-        k = lst[:offset]
-        lst = lst[offset:]
-        print(k)
-        print(lst)
-        print("\n\n")
-
-
-def wloop():
-    lst = [1, 2, 3, 4, 5]
-    offset = 2
-
-    iters = len(lst) // offset
-
-    while lst != []:
-        k = lst[:offset]
-        lst = lst[offset:]
-        print(k)
-        print(lst)
-        print("\n\n")
-
-        
-While loop does not work inside of the extractor, inherently.
-"""
-
-
-
 def extract( 
         s11_filename, 
         gain_filename, 
