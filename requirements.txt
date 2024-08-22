@@ -1,2 +1,4 @@
 customtkinter
 numpy
+cx_Freeze
+idna
