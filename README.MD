@@ -7,7 +7,7 @@ CST Studio Pipeline is a Python program designed to extract and process data fro
 Clone the repository using Git:
 
 ```bash
-git clone https://github.com/brushwayne/cst_studio-pipeline.git
+git clone https://github.com/brushwayne/cst-studio-pipeline.git
 ```
 
 Create a virtual environment
